@@ -50,6 +50,15 @@ client.connect(err => {
             })
     })
 
+    app.get('/userOrder/:email', (req, res) => {
+        const email = req.params.email
+        orderCollection.find({email: email})
+        .toArray((err, result)=>{
+            console.log(result)
+            res.json(result)
+        })
+    })
+
     app.delete('/delete/:id', (req, res) => {
         console.log(req.params.id)
         collection.deleteOne({ _id: ObjectId(req.params.id) })
