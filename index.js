@@ -13,6 +13,7 @@ const uri = process.env.DB_URI;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 client.connect(err => {
     const collection = client.db("safaLeather").collection("product");
+    const orderCollection = client.db("safaLeather").collection("order");
 
     app.post('/addProduct', (req, res) => {
         collection.insertOne(req.body)
@@ -23,7 +24,7 @@ client.connect(err => {
             })
     })
 
-    app.get('/allProdct', (req, res) => {
+    app.get('/allProduct', (req, res) => {
         collection.find({})
             .toArray((err, result) => {
                 res.json(result)
@@ -33,10 +34,19 @@ client.connect(err => {
     app.get('/orders/:id', (req, res) => {
         console.log(req.params.id)
 
-        collection.find({_id: ObjectId(req.params.id) })
+        collection.find({ _id: ObjectId(req.params.id) })
             .toArray((err, result) => {
                 console.log(result)
                 res.json(result)
+            })
+    })
+
+    app.post('/orderBy', (req, res) => {
+        const order = req.body
+        orderCollection.insertOne(order)
+            .then(result => {
+                console.log(result)
+                res.json(result.insertedCount > 0)
             })
     })
 
