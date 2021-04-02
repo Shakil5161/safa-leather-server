@@ -19,6 +19,7 @@ client.connect(err => {
             .then(result => {
                 console.log(result)
                 res.json(result.insertedCount > 0)
+                res.redirect('/')
             })
     })
 
